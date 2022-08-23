@@ -2,7 +2,7 @@
 
   <div class="badass-todo">
     <div class="title has-text-centered">Badass Todo</div>
-    <div class="field is-grouped">
+    <div class="field is-grouped mb-5">
   <p class="control is-expanded">
     <input class="input" type="text" placeholder="Add a todo">
   </p>
@@ -11,12 +11,31 @@
       Add
     </a>
   </p>
+  </div>
+
+  <div
+  v-for="i in 3"
+    class="card mb-5"
+  >
+  <div class="card-content">
+    <div class="content">
+      <div class="columns is-mobile is-vcentered"> 
+          Shave my butt
+        <div class="column">
+        </div>
+        <div class="column is-5 has-text-right">
+          <button class="button is-light">&check;</button>
+          <button class="button is-danger ml-2">&cross;</button>
+        </div>
+
+      </div>
+    
+    
+    </div>
+  </div>
 </div>
 
-
-  </div>
-  
-
+</div>
 </template>
 
 <style>
