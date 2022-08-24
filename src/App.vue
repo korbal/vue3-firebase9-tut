@@ -40,7 +40,10 @@
         </div>
         <div class="column is-5 has-text-right">
           <button class="button is-light">&check;</button>
-          <button class="button is-danger ml-2">&cross;</button>
+          <button
+            @click="deleteTodo(todo.id)"
+            class="button is-danger ml-2">&cross;</button
+          >
         </div>
 
       </div>
@@ -63,21 +66,20 @@ import { v4 as uuidv4 } from 'uuid';
 //todos
 
 const todos = ref([
-  // {
-  //   id: 'id1',
-  //   content: 'Shave my butt',
-  //   done: false
-  // },
-  // { 
-  //   id: 'id2', 
-  //   content: 'Wash my butt', 
-  //   done: false }
+  {
+    id: 'id1',
+    content: 'Shave my butt',
+    done: false
+  },
+  { 
+    id: 'id2', 
+    content: 'Wash my butt', 
+    done: false }
     
 ])
 
 
 // add todo
-
 //setting up a ref for the user input to grab. then setting the value to the input value by adding a v-model to the input up above. 
 const newTodoContent = ref('')
 
@@ -97,6 +99,17 @@ const addTodo = () => {
   
   
 }
+
+// delete todo
+const deleteTodo = (id) => {
+  //console.log('id', id)
+  // filter through the todos array and return all the todos that don't match the id
+  const updatedTodos = todos.value.filter(todo => todo.id !== id)
+  //console.log('updatedTodos', updatedTodos)
+  // set the todos array to the updatedTodos array
+  todos.value = updatedTodos
+}
+
 
 const focusInputField = () => {
    const inputField = document.querySelector('.input')
