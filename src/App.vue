@@ -14,13 +14,13 @@
   </div>
 
   <div
-  v-for="i in 3"
+  v-for="todo in todos"
     class="card mb-5"
   >
   <div class="card-content">
     <div class="content">
       <div class="columns is-mobile is-vcentered"> 
-          Shave my butt
+          {{todo.content}}
         <div class="column">
         </div>
         <div class="column is-5 has-text-right">
@@ -37,6 +37,28 @@
 
 </div>
 </template>
+
+<script setup>
+
+// imports
+import {ref} from 'vue'
+
+//todos
+
+const todos = ref([
+  {
+    id: 'id1',
+    content: 'Shave my butt',
+    done: false
+  },
+  { 
+    id: 'id2', 
+    content: 'Wash my butt', 
+    done: false }
+    
+])
+
+</script>
 
 <style>
 
