@@ -28,18 +28,29 @@
     </form>
 
 
+<!-- binding class and only adding to items, that has done =true -->
   <div
   v-for="todo in todos"
     class="card mb-5"
+    :class="{ 'has-background-success-light': todo.done }"
   >
   <div class="card-content">
     <div class="content">
+
       <div class="columns is-mobile is-vcentered"> 
+          <!-- if done = true then apply bulma helper class to make text green -->
+        <div
+          :class="{ 'has-text-success line-through': todo.done }"
+          class="column"
+        >
           {{todo.content}}
-        <div class="column">
         </div>
         <div class="column is-5 has-text-right">
-          <button class="button is-light">&check;</button>
+         <button
+            @click="toggleDone(todo.id)"
+            :class="todo.done ? 'is-success' : 'is-light'"
+            class="button">&check;</button
+          >
           <button
             @click="deleteTodo(todo.id)"
             class="button is-danger ml-2">&cross;</button
@@ -66,15 +77,16 @@ import { v4 as uuidv4 } from 'uuid';
 //todos
 
 const todos = ref([
-  {
-    id: 'id1',
-    content: 'Shave my butt',
-    done: false
-  },
-  { 
-    id: 'id2', 
-    content: 'Wash my butt', 
-    done: false }
+  // {
+  //   id: 'id1',
+  //   content: 'Shave my butt',
+  //   done: false
+  // },
+  // { 
+  //   id: 'id2', 
+  //   content: 'Wash my butt', 
+  //   done: true 
+  // }
     
 ])
 
@@ -116,7 +128,27 @@ const focusInputField = () => {
     inputField.focus()
 }
 
+// toggle done
+const toggleDone = (id) => {
+  //console.log('id', id)
+  // filter through the todos array and return all the todos that don't match the id
+  const updatedTodos = todos.value.map(todo => {
+    if (todo.id === id) {
+      return {
+        ...todo,
+        done: !todo.done
+      }
+    }
+    return todo
+  } )
+  //console.log('updatedTodos', updatedTodos)
+  // set the todos array to the updatedTodos array
+  todos.value = updatedTodos
+}
+
 </script>
+
+
 
 <style>
 
@@ -128,5 +160,8 @@ const focusInputField = () => {
   margin: 0 auto;
 }
 
+.line-through{
+  text-decoration: line-through;
+}
 
 </style>
