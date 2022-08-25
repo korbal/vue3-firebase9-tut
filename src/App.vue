@@ -70,9 +70,13 @@
 <script setup>
 
 // imports
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 // imported uuid with npm temporarily, before hooking it up to firebase
 import { v4 as uuidv4 } from 'uuid';
+// imported firebase
+import { collection, getDocs } from 'firebase/firestore';
+import {db} from '@/firebase';
+
 
 //todos
 
@@ -90,6 +94,23 @@ const todos = ref([
     
 ])
 
+// GET TODOS FROM FIREBASE
+
+//because we use await, we need to use async function on onMounted()
+onMounted( async () => {
+ const querySnapshot = await getDocs(collection(db, "todos"));
+  let fbTodos = [];
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    const todo = {
+      id: doc.id,
+      content: doc.data().content,
+      done: doc.data().done
+    }
+    fbTodos.push(todo);
+});
+todos.value = fbTodos;
+});
 
 // add todo
 //setting up a ref for the user input to grab. then setting the value to the input value by adding a v-model to the input up above. 
