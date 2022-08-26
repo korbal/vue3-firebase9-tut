@@ -74,7 +74,7 @@ import {onMounted, ref} from 'vue';
 // imported uuid with npm temporarily, before hooking it up to firebase
 import { v4 as uuidv4 } from 'uuid';
 // imported firebase
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 import {db} from '@/firebase';
 
 
@@ -96,21 +96,42 @@ const todos = ref([
 
 // GET TODOS FROM FIREBASE
 
-//because we use await, we need to use async function on onMounted()
-onMounted( async () => {
- const querySnapshot = await getDocs(collection(db, "todos"));
-  let fbTodos = [];
+//because we use await, we need to use async function on onMounted(). need to add async to onmounted if uncommented, because await
+onMounted(  () => {
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// this works, but no real time updates
+//  const querySnapshot = await getDocs(collection(db, "todos"));
+//   let fbTodos = [];
+//   querySnapshot.forEach((doc) => {
+//     console.log(doc.id, " => ", doc.data());
+//     const todo = {
+//       id: doc.id,
+//       content: doc.data().content,
+//       done: doc.data().done
+//     }
+//     fbTodos.push(todo);
+// });
+// todos.value = fbTodos;
+// });
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+  onSnapshot(collection(db, "todos"), (querySnapshot) => {
+  const fbTodos = [];
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-    const todo = {
+      const todo = {
       id: doc.id,
       content: doc.data().content,
       done: doc.data().done
     }
     fbTodos.push(todo);
+  });
+  todos.value = fbTodos;
+  });
+  
 });
-todos.value = fbTodos;
-});
+
+
+
 
 // add todo
 //setting up a ref for the user input to grab. then setting the value to the input value by adding a v-model to the input up above. 
