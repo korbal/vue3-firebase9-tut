@@ -73,7 +73,7 @@
 import {onMounted, ref} from 'vue';
 
 // imported firebase
-import { collection, getDocs, onSnapshot, addDoc } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import {db} from '@/firebase';
 
 // firebase refs
@@ -168,12 +168,13 @@ focusInputField()
 
 // delete todo
 const deleteTodo = (id) => {
-  //console.log('id', id)
-  // filter through the todos array and return all the todos that don't match the id
-  const updatedTodos = todos.value.filter(todo => todo.id !== id)
-  //console.log('updatedTodos', updatedTodos)
-  // set the todos array to the updatedTodos array
-  todos.value = updatedTodos
+  // //console.log('id', id)
+  // // filter through the todos array and return all the todos that don't match the id
+  // const updatedTodos = todos.value.filter(todo => todo.id !== id)
+  // //console.log('updatedTodos', updatedTodos)
+  // // set the todos array to the updatedTodos array
+  // todos.value = updatedTodos
+  deleteDoc(doc(todosCollectionRef, id))
 }
 
 
