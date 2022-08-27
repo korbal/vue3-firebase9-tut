@@ -73,7 +73,7 @@
 import {onMounted, ref} from 'vue';
 
 // imported firebase
-import { collection, getDocs, onSnapshot, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import {db} from '@/firebase';
 
 // firebase refs
@@ -185,20 +185,27 @@ const focusInputField = () => {
 
 // toggle done
 const toggleDone = (id) => {
-  //console.log('id', id)
-  // filter through the todos array and return all the todos that don't match the id
-  const updatedTodos = todos.value.map(todo => {
-    if (todo.id === id) {
-      return {
-        ...todo,
-        done: !todo.done
-      }
-    }
-    return todo
-  } )
-  //console.log('updatedTodos', updatedTodos)
-  // set the todos array to the updatedTodos array
-  todos.value = updatedTodos
+  // //console.log('id', id)
+  // // filter through the todos array and return all the todos that don't match the id
+  // const updatedTodos = todos.value.map(todo => {
+  //   if (todo.id === id) {
+  //     return {
+  //       ...todo,
+  //       done: !todo.done
+  //     }
+  //   }
+  //   return todo
+  // } )
+  // //console.log('updatedTodos', updatedTodos)
+  // // set the todos array to the updatedTodos array
+  // todos.value = updatedTodos
+  
+  const index = todos.value.findIndex(todo => todo.id === id)
+  
+  updateDoc(doc(todosCollectionRef, id), {
+    done: !todos.value[index].done
+  })
+  
 }
 
 </script>
