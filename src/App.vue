@@ -71,11 +71,14 @@
 
 // imports
 import {onMounted, ref} from 'vue';
-// imported uuid with npm temporarily, before hooking it up to firebase
-import { v4 as uuidv4 } from 'uuid';
+
 // imported firebase
-import { collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, addDoc } from 'firebase/firestore';
 import {db} from '@/firebase';
+
+// firebase refs
+
+const todosCollectionRef = collection(db, 'todos');
 
 
 //todos
@@ -115,7 +118,7 @@ onMounted(  () => {
 // });
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-  onSnapshot(collection(db, "todos"), (querySnapshot) => {
+  onSnapshot(todosCollectionRef, (querySnapshot) => {
   const fbTodos = [];
   querySnapshot.forEach((doc) => {
       const todo = {
@@ -137,20 +140,29 @@ onMounted(  () => {
 //setting up a ref for the user input to grab. then setting the value to the input value by adding a v-model to the input up above. 
 const newTodoContent = ref('')
 
-const addTodo = () => {
-  const newTodo = {
-    id: uuidv4(), //uuidv4 is a npm package that generates a random id
-    content: newTodoContent.value,
-    done: false
-  }
-  //console.log('newTodo', newTodo)
-  // pushing the newTodo to the todos array (the beginning)
-  todos.value.unshift(newTodo)
-  // clearing the input field
-  newTodoContent.value = ''
-  //focus on the input field
-  focusInputField()
-  
+const addTodo =  () => {
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// // this is for local update. see firebase below
+//   const newTodo = {
+//     id: uuidv4(), //uuidv4 is a npm package that generates a random id
+//     content: newTodoContent.value,
+//     done: false
+//   }
+//   //console.log('newTodo', newTodo)
+//   // pushing the newTodo to the todos array (the beginning)
+//   todos.value.unshift(newTodo)
+//   // clearing the input field
+//   newTodoContent.value = ''
+//   //focus on the input field
+//   focusInputField()
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+  addDoc(todosCollectionRef, {
+  content: newTodoContent.value,
+  done: false
+});
+newTodoContent.value = ''
+focusInputField()
   
 }
 
