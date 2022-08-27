@@ -73,12 +73,14 @@
 import {onMounted, ref} from 'vue';
 
 // imported firebase
-import { collection, getDocs, onSnapshot, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, 
+        addDoc, deleteDoc, doc, updateDoc,
+        query, orderBy, limit } from 'firebase/firestore';
 import {db} from '@/firebase';
 
 // firebase refs
-
 const todosCollectionRef = collection(db, 'todos');
+const todosCollectionQuery = query(todosCollectionRef, orderBy('date', 'desc'), );
 
 
 //todos
@@ -118,7 +120,7 @@ onMounted(  () => {
 // });
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-  onSnapshot(todosCollectionRef, (querySnapshot) => {
+  onSnapshot(todosCollectionQuery, (querySnapshot) => {
   const fbTodos = [];
   querySnapshot.forEach((doc) => {
       const todo = {
@@ -159,7 +161,8 @@ const addTodo =  () => {
 
   addDoc(todosCollectionRef, {
   content: newTodoContent.value,
-  done: false
+  done: false,
+  date: Date.now()
 });
 newTodoContent.value = ''
 focusInputField()
